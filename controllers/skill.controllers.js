@@ -1,5 +1,4 @@
 import Skill from '../models/skill.models.js';
-
 export const getAllSkills = async (req, res) => {
     try {
         console.log("✅ [API] /api/skills called. Attempting to fetch skills...");
