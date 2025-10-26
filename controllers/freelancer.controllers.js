@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import User from '../models/user.models.js';
 import Freelancer from '../models/freelancer.models.js';
-import Skill from '../models/skill.models.js'; // <--- 1. IMPORT THE SKILL MODEL
+import Skill from '../models/Skill.models.js'; 
 import bcrypt from 'bcryptjs';
 
 // Register Freelancer
