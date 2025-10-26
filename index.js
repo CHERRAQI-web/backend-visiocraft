@@ -62,34 +62,3 @@ app.listen(PORT, () => {
 });
 
 export default app;
-
-// === START RAILWAY DEBUG CODE ===
-import fs from "fs";
-import path from "path";
-
-console.log("--- DEBUGGING RAILWAY FILESYSTEM ---");
-
-// 1. تحقق من الملفات الموجودة في مجلد models وأسماؤها بالضبط
-const modelsDir = "/app/models";
-try {
-  const files = fs.readdirSync(modelsDir);
-  console.log("Files in /app/models/:", files);
-} catch (err) {
-  console.error("Could not read /app/models/ directory:", err);
-}
-
-// 2. تحقق من محتوى ملف المتحكم الذي يسبب المشكلة
-const controllerPath = "/app/controllers/project.controllers.js";
-try {
-  const content = fs.readFileSync(controllerPath, "utf8");
-  const lines = content.split("\n");
-  console.log("--- First 5 lines of project.controllers.js ---");
-  for (let i = 0; i < 5; i++) {
-    console.log(`Line ${i + 1}:`, lines[i]);
-  }
-} catch (err) {
-  console.error("Could not read project.controllers.js file:", err);
-}
-
-console.log("--- END DEBUGGING ---");
-// === END RAILWAY DEBUG CODE ===
