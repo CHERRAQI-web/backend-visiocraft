@@ -1,6 +1,7 @@
 import Project from '../models/project.models.js';
 import Freelancer from '../models/freelancer.models.js';
-import Skill from '../models/skill.models.js'; 
+import Skill from '../models/skill.models.js';
+
 import AiLog from '../models/aiLog.models.js'; // Don't forget to import AiLog
 import mongoose from 'mongoose';
 import ProjetFile from '../models/project_files.models.js';
