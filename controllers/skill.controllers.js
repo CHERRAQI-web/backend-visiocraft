@@ -7,7 +7,7 @@ export const getAllSkills = async (req, res) => {
         console.log(`✅ [API] Found ${skills.length} skills. Sending to frontend.`);
         res.status(200).json(skills);
     } catch (error) {
-        console.error("❌ [API] Error fetching skills:", error); // L'error l'khat'a
+        console.error("❌ [API] Error fetching skills:", error); 
         res.status(500).json({ message: 'Erreur lors de la récupération des compétences.' });
     }
 };
