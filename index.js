@@ -47,7 +47,9 @@ app.use("/api", fileRoutes);
 
 app.use(errorHandler);
 
-const port = process.env.PORT ?? 5000;
-app.listen(port, () => {
-  console.log(`🚀 Serveur lancé sur http://localhost:${port}`);
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Serveur démarré sur le port ${PORT}`);
 });
+
+export default app;
