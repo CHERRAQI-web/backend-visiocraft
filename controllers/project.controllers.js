@@ -42,7 +42,7 @@ export const createProjectRequest = async (req, res) => {
 
         // 1. Call Python service for skill extraction
         console.log("Calling Python AI service for skill extraction...");
-        const aiServiceResponse = await fetch('http://localhost:5000/extract-skills', {
+        const aiServiceResponse = await fetch('https://aivisiocraft.up.railway.app/extract-skills', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ project_details: project_details }),
@@ -612,7 +612,7 @@ export const updateProject = async (req, res) => {
             console.log("Project details changed, re-extracting skills...");
             
             // Call AI service to extract skills
-            const aiServiceResponse = await fetch('http://localhost:5000/extract-skills', {
+            const aiServiceResponse = await fetch('https://aivisiocraft.up.railway.app/extract-skills', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ project_details: project_details }),
