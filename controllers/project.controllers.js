@@ -1,5 +1,4 @@
 import Project from '../models/project.models.js';
-import AIService from '../services/aiService.js';
 import Freelancer from '../models/freelancer.models.js';
 import Skill from '../models/skill.models.js'; // Don't forget to import Skill
 import AiLog from '../models/aiLog.models.js'; // Don't forget to import AiLog

@@ -6,7 +6,6 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import categorieRoutes from "./routes/categorie.routes.js";
 import projectRoutes from "./routes/projet.routes.js";
-import messageRoutes from "./routes/message.routes.js";
 import fileRoutes from "./routes/projectFile.routes.js";
 import skillRoutes from "./routes/skill.routes.js";
 import { errorHandler } from "./middleware/error.middleware.js";
@@ -44,7 +43,6 @@ app.use("/api/clients", clientRoutes);
 app.use('/api/freelancers', freelancerRoutes);
 app.use('/api/stats', statsRoutes);
 
-app.use("/api", messageRoutes);
 app.use("/api", fileRoutes);
 
 app.use(errorHandler);
