@@ -32,7 +32,6 @@ app.use(
       "https://freelancer-two-tau.vercel.app",
       "https://admin-five-pearl.vercel.app",
       "https://client-visiocraft.vercel.app",
-      "https://backend-visiocraft-production.up.railway.app",
     ],
     credentials: true,
     sameSite: "none",
