@@ -185,7 +185,7 @@ export const handleGoogleCallback = async (req, res) => {
     console.log("Authentication successful for user:", user.email);
     
     // Redirect to the homepage with success message
-    res.redirect('http://localhost:5175/?auth=success');
+    res.redirect('https://client-visiocraft.vercel.app/?auth=success');
     
   } catch (error) {
     console.error("=== DETAILED ERROR DURING GOOGLE CALLBACK ===");
@@ -194,7 +194,7 @@ export const handleGoogleCallback = async (req, res) => {
     console.error("===============================================");
     
     // Redirect with error message
-    res.redirect('http://localhost:5175/login?auth=error');
+    res.redirect('https://client-visiocraft.vercel.app/login?auth=error');
   }
 };
 
