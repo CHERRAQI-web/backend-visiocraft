@@ -48,9 +48,9 @@ const initializeDriveService = () => {
 
     // Create OAuth 2.0 client
     oauth2Client = new google.auth.OAuth2(
-      client_id,
-      client_secret,
-      redirect_uris[0]
+      clientId,
+      clientSecret,
+      redirectUri[0]
     );
     
     console.log('Google Drive service initialized successfully');
