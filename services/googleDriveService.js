@@ -1,5 +1,3 @@
-// services/googleDriveService.js
-
 import { google } from 'googleapis';
 import { Readable } from 'stream';
 import fs from 'fs';
