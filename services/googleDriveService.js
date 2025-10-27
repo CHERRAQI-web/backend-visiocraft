@@ -50,7 +50,7 @@ const initializeDriveService = () => {
     oauth2Client = new google.auth.OAuth2(
       clientId,
       clientSecret,
-      redirectUri[0]
+      redirectUri
     );
     
     console.log('Google Drive service initialized successfully');
