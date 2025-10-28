@@ -176,8 +176,19 @@ export const handleGoogleCallback = async (req, res) => {
       redirectUrl = 'https://frontend-visiocraft.vercel.app/';
     }
 
-    // Redirect directly to the appropriate dashboard
-    res.redirect(redirectUrl);
+    // Add token as a query parameter for local storage
+    const url = new URL(redirectUrl);
+    url.searchParams.append('token', token);
+    url.searchParams.append('user', JSON.stringify({
+      id: user._id,
+      email: user.email,
+      role: user.role,
+      first_name: user.first_name,
+      last_name: user.last_name
+    }));
+
+    // Redirect to the appropriate dashboard with token in URL
+    res.redirect(url.toString());
 
   } catch (error) {
     console.error("Error during Google callback:", error);
