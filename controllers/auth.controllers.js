@@ -186,7 +186,15 @@ export const handleGoogleCallback = async (req, res) => {
       first_name: user.first_name,
       last_name: user.last_name
     }));
-
+  res.status(200).json({
+      message: 'Logged in successfully',
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role
+      }
+    });
     // Redirect to the appropriate dashboard with token in URL
     res.redirect(url.toString());
 
