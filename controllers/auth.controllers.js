@@ -112,47 +112,75 @@ export const logout = async (req, res) => {
 
 export const handleGoogleCallback = async (req, res) => {
   const { code } = req.query;
-  
-  // ... (tout ton code pour trouver/créer l'utilisateur et générer le JWT reste le même)
-  const jwtToken = jwt.sign(
-    { 
-      userId: user._id, 
-      email: user.email, 
-      role: user.role 
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: '7d' }
-  );
 
-  // --- CHANGEMENT CLÉ : On met le token dans un cookie ---
-  const isProduction = process.env.NODE_ENV === "production";
-
-  res.cookie('token', jwtToken, {
-    httpOnly: true, // Indispensable : Le JavaScript ne peut pas lire le cookie
-    secure: isProduction, // Indispensable : Le cookie n'est envoyé qu'en HTTPS
-    sameSite: 'none', // Indispensable : Pour les requêtes cross-site
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
-    domain: '.visiocraft.vercel.app' // TRÈS IMPORTANT : Partage le cookie avec tous les sous-domaines
-  });
-
-  // --- CHANGEMENT : On ne renvoie plus de JSON, on redirige ---
-  let redirectUrl = 'https://client-visiocraft.vercel.app/'; // URL par défaut
-
-  switch (user.role) {
-    case 'Freelancer':
-      redirectUrl = 'https://freelancer-two-tau.vercel.app/';
-      break;
-    case 'Admin':
-      redirectUrl = 'https://admin-five-pearl.vercel.app/';
-      break;
-    case 'Client':
-      redirectUrl = 'https://client-visiocraft.vercel.app/';
-      break;
+  if (!code) {
+    return res.status(400).json({ message: "Authorization code missing." });
   }
 
-  const finalRedirectUrl = `${redirectUrl}?auth=success`;
-  console.log(`Redirection de l'utilisateur vers : ${finalRedirectUrl}`);
-  res.redirect(finalRedirectUrl);
+  try {
+    const { tokens, userInfo } = await handleGoogleCallbackAndFetchUser(code);
+
+    if (!userInfo || !userInfo.email) {
+      return res.status(400).json({ message: "Unable to retrieve user information from Google." });
+    }
+
+    let user = await User.findOne({ email: userInfo.email });
+
+    if (!user) {
+      user = new User({
+        first_name: userInfo.given_name || '',
+        last_name: userInfo.family_name || '',
+        email: userInfo.email,
+        password: 'google_oauth_' + Math.random().toString(36).substring(2, 15),
+        role: 'Client',
+        googleTokens: tokens
+      });
+      await user.save();
+      
+      const newClient = new Client({
+        user_id: user._id,
+        company_name: userInfo.name || '',
+        industry: '',
+        googleTokens: tokens
+      });
+      await newClient.save();
+    } else {
+      user.googleTokens = tokens;
+      await user.save();
+      
+      const client = await Client.findOne({ user_id: user._id });
+      if (client) {
+        client.googleTokens = tokens;
+        await client.save();
+      }
+    }
+
+    // Create JWT token
+    const jwtToken = jwt.sign(
+      { 
+        userId: user._id, 
+        email: user.email, 
+        role: user.role 
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    // --- CHANGEMENT CLÉ : On renvoie le token en JSON, pas de cookie, pas de redirection ---
+    res.status(200).json({
+      message: 'Authentication successful',
+      token: jwtToken,
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role
+      }
+    });
+
+  } catch (error) {
+    console.error("Error during Google callback:", error);
+    res.status(500).json({ message: 'Internal server error during authentication.' });
+  }
 };
 
 // Get Google Authentication URL
