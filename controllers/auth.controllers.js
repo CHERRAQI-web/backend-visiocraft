@@ -152,13 +152,14 @@ export const handleGoogleCallback = async (req, res) => {
       }
     }
 
-   const token = generateToken(user);
+    const token = generateToken(user);
     
     console.log("Generated token for user", user.email, ":", token);
 
+    // Set the token in a cookie
     res.cookie("token", token, {
       httpOnly: true,
-secure: true,
+      secure: true,
       maxAge: 30 * 24 * 60 * 60 * 1000,
       sameSite: 'none',
     });
@@ -175,24 +176,14 @@ secure: true,
       redirectUrl = 'https://frontend-visiocraft.vercel.app/';
     }
 
-    // Return the token, user info, and redirect URL
-    res.status(200).json({
-      message: 'Authentication successful',
-      token,
-      user: {
-        id: user._id,
-        email: user.email,
-        role: user.role
-      },
-      redirectUrl
-    });
+    // Redirect directly to the appropriate dashboard
+    res.redirect(redirectUrl);
 
   } catch (error) {
     console.error("Error during Google callback:", error);
     res.status(500).json({ message: 'Internal server error during authentication.' });
   }
 };
-
 // Get Google Authentication URL
 export const getGoogleAuthUrl = async (req, res) => {
   try {
