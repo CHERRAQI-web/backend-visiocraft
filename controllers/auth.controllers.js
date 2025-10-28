@@ -152,16 +152,16 @@ export const handleGoogleCallback = async (req, res) => {
       }
     }
 
-    // Create JWT token
-    const jwtToken = jwt.sign(
-      { 
-        userId: user._id, 
-        email: user.email, 
-        role: user.role 
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
+   const token = generateToken(user);
+    
+    console.log("Generated token for user", user.email, ":", token);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+secure: true,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      sameSite: 'none',
+    });
 
     // Determine the redirect URL based on user role
     let redirectUrl;
@@ -178,7 +178,7 @@ export const handleGoogleCallback = async (req, res) => {
     // Return the token, user info, and redirect URL
     res.status(200).json({
       message: 'Authentication successful',
-      token: jwtToken,
+      token,
       user: {
         id: user._id,
         email: user.email,
