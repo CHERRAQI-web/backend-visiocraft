@@ -107,9 +107,6 @@ export const logout = async (req, res) => {
   }
 };
 
-// Handle Google OAuth Callback
-// controllers/auth.controllers.js
-
 export const handleGoogleCallback = async (req, res) => {
   const { code } = req.query;
 
@@ -166,7 +163,19 @@ export const handleGoogleCallback = async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    // --- CHANGEMENT CLÉ : On renvoie le token en JSON, pas de cookie, pas de redirection ---
+    // Determine the redirect URL based on user role
+    let redirectUrl;
+    if (user.role === 'Admin') {
+      redirectUrl = 'https://admin-visiocraft.vercel.app/';
+    } else if (user.role === 'Freelancer') {
+      redirectUrl = 'https://freelancer-visiocraft.vercel.app/';
+    } else if (user.role === 'Client') {
+      redirectUrl = 'https://client-visiocraft.vercel.app/';
+    } else {
+      redirectUrl = 'https://frontend-visiocraft.vercel.app/';
+    }
+
+    // Return the token, user info, and redirect URL
     res.status(200).json({
       message: 'Authentication successful',
       token: jwtToken,
@@ -174,7 +183,8 @@ export const handleGoogleCallback = async (req, res) => {
         id: user._id,
         email: user.email,
         role: user.role
-      }
+      },
+      redirectUrl
     });
 
   } catch (error) {
